@@ -138,11 +138,11 @@ resource "aws_ssm_maintenance_window_task" "ShutDown_Unica2" {
   }
 }
 
-resource "aws_ssm_maintenance_window_task" "Restart_Unica1" {
+resource "aws_ssm_maintenance_window_task" "Restart_Unica1_and_wait" {
   window_id = aws_ssm_maintenance_window.PatchandReboot.id
-  task_arn  = "AWS-RestartEC2Instance"
+  task_arn  = "RestartServerandWait"
   task_type = "AUTOMATION"
-  priority  = 100
+  priority  = 200
   # max_concurrency = 1
   # max_errors      = 1
 
@@ -157,20 +157,9 @@ resource "aws_ssm_maintenance_window_task" "Restart_Unica1" {
         name   = "AutomationAssumeRole"
         values = [var.SSMAutomationRole]
       }
-    }
-  }
-}
 
-resource "aws_ssm_maintenance_window_task" "Wait_X_Minutes" {
-  window_id = aws_ssm_maintenance_window.PatchandReboot.id
-  task_arn  = "AWA_Sleep"
-  task_type = "AUTOMATION"
-  priority  = 200
-
-  task_invocation_parameters {
-    automation_parameters {
       parameter {
-        name   = "Duration"
+        name   = "SleepDuration"
         values = [var.sleep_duration]
       }
     }
