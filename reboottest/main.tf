@@ -140,7 +140,7 @@ resource "aws_ssm_maintenance_window_task" "ShutDown_Unica2" {
 
 resource "aws_ssm_maintenance_window_task" "Restart_Unica1_and_wait" {
   window_id = aws_ssm_maintenance_window.PatchandReboot.id
-  task_arn  = "RestartServerandWait"
+  task_arn  = "RebootServerandWait"
   task_type = "AUTOMATION"
   priority  = 200
   # max_concurrency = 1
