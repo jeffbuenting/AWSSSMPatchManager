@@ -8,13 +8,13 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region = var.aws_region
 }
 
 data "aws_instance" "Unica1" {
   filter {
     name   = "tag:Name"
-    values = ["AWS-UNICA-1"]
+    values = ["AWS-Unica-1"]
   }
 
   filter {
@@ -26,7 +26,7 @@ data "aws_instance" "Unica1" {
 data "aws_instance" "Unica2" {
   filter {
     name   = "tag:Name"
-    values = ["AWS-UNICA-2"]
+    values = ["AWS-Unica-2"]
   }
 
   filter {
@@ -52,7 +52,7 @@ resource "aws_ssm_maintenance_window_target" "Unica_Servers" {
 
   targets {
     key    = "tag:PatchGroup"
-    values = ["UNICAServers"]
+    values = ["${var.patchgroup}"]
   }
 }
 
@@ -70,7 +70,7 @@ resource "aws_ssm_maintenance_window_task" "Patch_Servers" {
   task_invocation_parameters {
     run_command_parameters {
       parameter {
-        name   = "operation"
+        name   = "Operation"
         values = [var.operation]
       }
 
@@ -78,6 +78,7 @@ resource "aws_ssm_maintenance_window_task" "Patch_Servers" {
         name   = "RebootOption"
         values = ["NoReboot"]
       }
+
     }
   }
 
@@ -86,34 +87,6 @@ resource "aws_ssm_maintenance_window_task" "Patch_Servers" {
     values = [aws_ssm_maintenance_window_target.Unica_Servers.id]
   }
 }
-
-# resource "aws_ssm_maintenance_window_task" "Patch_Server2" {
-#   window_id       = aws_ssm_maintenance_window.PatchandReboot.id
-#   task_arn        = "AWS-RunPatchBaseline"
-#   task_type       = "RUN_COMMAND"
-#   priority        = 1
-#   max_concurrency = 5
-#   max_errors      = 1
-
-#   task_invocation_parameters {
-#     run_command_parameters {
-#       parameter {
-#         name   = "operation"
-#         values = [var.operation]
-#       }
-
-#       parameter {
-#         name   = "rebootoption"
-#         values = ["NoReboot"]
-#       }
-#     }
-#   }
-
-#   targets {
-#     key    = "InstanceIds"
-#     values = [data.aws_instance.Unica2.id]
-#   }
-# }
 
 resource "aws_ssm_maintenance_window_task" "ShutDown_Unica2" {
   window_id = aws_ssm_maintenance_window.PatchandReboot.id

@@ -2,13 +2,13 @@
 variable "cronjob" {
   description = "cron job schedule"
   type        = string
-  default     = "cron(25 11 7 DEC ?)"
+  # default     = "cron(15 14 13 DEC ?)"
 }
 
 variable "operation" {
   description = "scan or install patch baseline"
   type        = string
-  default     = "scan"
+  default     = "Install"
 }
 
 variable "sleep_duration" {
@@ -18,7 +18,18 @@ variable "sleep_duration" {
 }
 
 variable "SSMAutomationRole" {
-  description = "What role should the automations run as"
+  description = "What role should the automations run asn (ARN)"
   type        = string
-  default     = "arn:aws:iam::186054512200:role/SSMManagedInstance-Role"
+}
+
+variable "aws_region" {
+  description = "aws region to install resources."
+  type        = string
+  default     = "us-east-1"
+}
+
+variable "patchgroup" {
+  description = "Patch Group to target."
+  type        = string
+  default     = "UnicaServers"
 }

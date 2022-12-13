@@ -10,7 +10,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region = var.aws_region
 }
 
 module "instance" {
@@ -22,4 +22,5 @@ module "instance" {
   private_key   = "C:/Users/kwbre/Downloads/InstanceKey.pem"
   instance_name = "AWS-Unica"
   patchgroup    = "UnicaServers"
+  kp_name       = "InstanceKey"
 }
