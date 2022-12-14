@@ -56,9 +56,6 @@ resource "aws_ssm_maintenance_window_target" "Unica_Servers" {
   }
 }
 
-# because a task with multiple targets runs sequentially, a separate task for each target should be created to run parallel
-# https://docs.amazonaws.cn/en_us/systems-manager/latest/userguide/sysman-maintenance-assign-targets.html
-
 resource "aws_ssm_maintenance_window_task" "Patch_Servers" {
   window_id       = aws_ssm_maintenance_window.PatchandReboot.id
   task_arn        = "AWS-RunPatchBaseline"
